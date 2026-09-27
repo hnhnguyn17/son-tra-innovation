@@ -1,0 +1,16 @@
+@import './styles/fonts.css';
+@import './styles/theme.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-sans text-[#4A5568] bg-slate-50 antialiased selection:bg-[#0077B6] selection:text-white;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+}
