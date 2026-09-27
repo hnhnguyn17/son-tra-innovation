@@ -1,0 +1,123 @@
+.ocean-background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  background: #eef6f8;
+  contain: strict;
+}
+.ocean-background * { pointer-events: none; }
+.ocean-canopy { position: absolute; width: clamp(100px, 16vw, 220px); height: auto; top: -8px; left: -16px; opacity: .32; transform-origin: top left; animation: ocean-canopy-sway 14s ease-in-out infinite alternate; }
+@keyframes ocean-canopy-sway { from { transform: rotate(-3deg); } to { transform: rotate(2deg); } }
+.ocean-artworks { position: absolute; inset: 0; opacity: var(--artwork-strength, 1); transition: opacity 800ms ease; }
+.ocean-artwork { position: absolute; inset: 0; display: block; opacity: 0; transition: opacity 800ms ease; }
+.ocean-artwork[data-visible="true"] { opacity: 1; }
+.ocean-artwork img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 56%; }
+.ocean-reading-light { position: absolute; inset: 0; background: linear-gradient(to bottom, #fffaf23d, #fffaf238 35%, transparent 60%); }
+.ocean-waterlight {
+  position: absolute; inset: 52% -4% -4%; opacity: .2;
+  background: repeating-radial-gradient(ellipse at 35% 120%, transparent 0 20px, #f1fff838 22px 23px, transparent 26px 44px);
+  mask-image: linear-gradient(transparent, #0009);
+  animation: ocean-water-shimmer 12s ease-in-out infinite alternate;
+}
+.ocean-background[data-artwork-ready="true"] .ocean-object { opacity: 0; visibility: hidden; }
+.ocean-background[data-artwork-ready="true"] .ocean-object * { animation-play-state: paused !important; }
+.ocean-background[data-artwork-ready="true"] .ocean-waves { opacity: .08; }
+@keyframes ocean-water-shimmer { from { transform: translateX(-1%) scaleY(1); } to { transform: translateX(1%) scaleY(1.06); } }
+
+/* Full-height chapter openings keep the illustrated coast visible. Reading and
+   interactive material follows in a separate, readable glass surface. */
+.cinematic-chapter { position: relative; }
+.cinematic-prelude {
+  min-height: 100svh; position: relative; display: flex; flex-direction: column;
+  align-items: center; justify-content: space-between; padding: clamp(100px, 14vh, 145px) 24px 24px;
+  text-align: center; color: #102c3b; isolation: isolate;
+}
+.cinematic-intro { max-width: 620px; }
+.cinematic-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: .25em; margin-bottom: 20px; }
+.cinematic-title { font-size: clamp(44px, 5.6vw, 78px); line-height: 1.08; font-weight: 400; letter-spacing: -.045em; text-wrap: balance; color: #102c3b; text-shadow: 0 1px 20px #fff9; }
+.cinematic-title em { font-style: normal; }
+.cinematic-rule { display: block; height: 1px; width: 42px; background: #947b52; margin: 22px auto 15px; }
+.cinematic-description { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(17px, 2vw, 22px); line-height: 1.5; text-shadow: 0 1px 10px #fff; }
+.cinematic-note { display: flex; align-items: center; gap: 16px; max-width: 390px; padding: 18px 24px; margin: 22px auto 0; border: 1px solid #fffc; border-radius: 22px; background: #fffdf3e8; box-shadow: 0 8px 30px #12382e0d; text-align: left; }
+.cinematic-note svg { flex-shrink: 0; color: #36695b; }
+.cinematic-note p { font-size: 13px; line-height: 1.6; }
+.cinematic-bottom { display: flex; align-items: center; flex-direction: column; gap: 14px; margin-top: 180px; }
+.cinematic-explore { display: inline-flex; align-items: center; justify-content: center; gap: 26px; min-height: 48px; padding: 12px 24px; border-radius: 999px; border: 1px solid #fff; background: #fffdf5f0; font-family: 'Playfair Display', Georgia, serif; font-size: 15px; color: #102c3b; box-shadow: 0 6px 24px #0a283326; transition: background 200ms ease, transform 200ms ease; }
+.cinematic-explore:hover { background: white; transform: translateY(-2px); }
+.cinematic-art-note { padding: 3px 10px; border-radius: 999px; background: #102c3bbd; color: #fff; font-size: 9px; letter-spacing: .06em; }
+.chapter-content { position: relative; padding: 48px max(24px, calc((100vw - 1200px) / 2)) 56px; margin: 0 auto; background: #f8fbf6f5; border-top: 1px solid #ffffffb3; scroll-margin-top: 80px; }
+.chapter-content::before { content: ''; display: block; width: 40px; height: 3px; border-radius: 2px; margin: -24px auto 26px; background: #c4d4c7; }
+@media (min-width: 768px) {
+  .chapter-content { scroll-snap-align: start; scroll-snap-stop: always; }
+}
+@media (max-width: 767px) {
+  .ocean-artwork img { position: absolute; bottom: 0; height: 69%; object-position: 52% 64%; mask-image: linear-gradient(transparent, #000 14%); }
+  .ocean-artwork[data-artwork="harbor"] img { object-position: 56% 68%; }
+  .ocean-artwork[data-artwork="whale"] img { object-position: 53% 68%; }
+  .ocean-waterlight { inset: 65% -3% -3%; }
+  .cinematic-prelude { padding: 100px 20px 22px; min-height: 100svh; }
+  .cinematic-title { font-size: clamp(40px, 11vw, 54px); }
+  .cinematic-eyebrow { font-size: 9px; letter-spacing: .2em; margin-bottom: 18px; }
+  .cinematic-rule { margin: 18px auto 12px; }
+  .cinematic-note { padding: 14px 18px; border-radius: 18px; max-width: 320px; margin-top: 16px; }
+  .cinematic-note p { font-size: 12px; }
+  .cinematic-bottom { margin-top: 220px; gap: 10px; }
+  .chapter-content { padding: 44px 16px 36px; }
+}
+@media (max-height: 550px) and (min-width: 768px) {
+  .cinematic-prelude { padding-top: 85px; }
+  .cinematic-title { font-size: 44px; }
+  .cinematic-bottom { margin-top: 100px; }
+}
+.ocean-palette, .ocean-particles { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ocean-palette, .ocean-object, .ocean-waves { transition: opacity 800ms ease; }
+.ocean-light {
+  position: absolute; inset: -10% 35% 35% -15%;
+  background: radial-gradient(ellipse, #ffffff70, transparent 65%);
+  animation: ocean-light-drift 16s ease-in-out infinite alternate;
+}
+.ocean-reflection {
+  position: absolute; bottom: 0; left: 10%; width: 32%; height: 22%;
+  background: radial-gradient(ellipse at bottom, #ffffff85, transparent 70%);
+  animation: ocean-light-drift 12s ease-in-out infinite alternate-reverse;
+}
+.ocean-waves { position: absolute; bottom: 0; width: 100%; height: 20%; opacity: var(--wave-opacity); }
+.ocean-wave-track { position: absolute; bottom: 0; width: 200%; height: 100%; display: flex; color: #62aabe; animation: ocean-wave-flow 32s linear infinite; }
+.ocean-wave-track svg { flex: 0 0 50%; width: 50%; height: 100%; }
+.ocean-wave-1 { height: 70%; color: #2583a1; animation-duration: 23s; animation-delay: -9s; }
+.ocean-object { position: absolute; bottom: 9%; }
+.ocean-object svg { display: block; width: 100%; height: auto; }
+.ocean-boat { left: 0; width: 100%; }
+.ocean-boat-0 { opacity: var(--boat-one); bottom: 12%; }
+.ocean-boat-1 { opacity: var(--boat-two); bottom: 6%; }
+.ocean-drift { width: 104px; animation: ocean-drift 65s linear infinite; animation-delay: -18s; }
+.ocean-boat-1 .ocean-drift { width: 75px; animation-duration: 83s; animation-direction: reverse; animation-delay: -48s; }
+.ocean-bob { animation: ocean-bob 4.5s ease-in-out infinite; }
+.ocean-basket { right: 8%; width: 76px; opacity: var(--basket); bottom: 7%; }
+.ocean-whale { left: 0; width: 100%; bottom: 6%; opacity: var(--whale); }
+.ocean-whale-path { width: 230px; animation: ocean-drift 85s linear infinite reverse; animation-delay: -35s; }
+.ocean-background[data-paused="true"] * { animation-play-state: paused !important; }
+.ocean-object[data-active="false"] * { animation-play-state: paused !important; }
+.ocean-background[data-reduced-motion="true"] * { animation: none !important; transition: none !important; }
+.ocean-background[data-reduced-motion="true"] .ocean-drift { transform: translateX(8vw); }
+.ocean-background[data-reduced-motion="true"] .ocean-boat-1 .ocean-drift { transform: translateX(72vw); }
+.ocean-background[data-reduced-motion="true"] .ocean-whale-path { transform: translateX(8vw); }
+@keyframes ocean-wave-flow { to { transform: translateX(-50%); } }
+@keyframes ocean-drift { from { transform: translateX(-250px); } to { transform: translateX(calc(100vw + 250px)); } }
+@keyframes ocean-bob { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-5px) rotate(2deg); } }
+@keyframes ocean-light-drift { from { transform: translate(0, 0) scale(1); opacity: .5; } to { transform: translate(3%, 2%) scale(1.08); opacity: .85; } }
+@media (max-width: 767px) {
+  .ocean-object[data-active="false"] { visibility: hidden; }
+  .ocean-waves { height: 15%; }
+  .ocean-drift { width: 78px; }
+  .ocean-boat-1 .ocean-drift { width: 60px; }
+  .ocean-basket { width: 58px; right: 5%; }
+  .ocean-whale-path { width: 165px; }
+  .ocean-light { animation: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ocean-background * { animation: none !important; transition: none !important; }
+}

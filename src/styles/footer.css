@@ -1,0 +1,56 @@
+.story-footer {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #0a192f;
+  padding: 64px 32px 32px;
+  border-top: 1px solid #23404e;
+}
+.story-footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-areas: 'brand links sources';
+  column-gap: 44px;
+  row-gap: 8px;
+}
+.story-footer-brand { grid-area: brand; }
+.story-footer-title { font-size: clamp(27px, 2.6vw, 40px); font-weight: 400; line-height: 1.2; letter-spacing: -.025em; text-wrap: balance; }
+.story-footer-links { grid-area: links; }
+.story-footer-sources { grid-area: sources; }
+.story-footer-links, .story-footer-sources { border-left: 1px solid #b2d1d414; padding-left: 24px; }
+.story-footer-link { min-height: 44px; line-height: 1.6; }
+.story-footer-art {
+  position: absolute;
+  z-index: -1;
+  inset: 20% 0 28px;
+  display: block;
+  width: 100%;
+  pointer-events: none;
+  user-select: none;
+  /* Desktop trims only the generous empty navy above and below the drawing. */
+  mask-image: linear-gradient(transparent, #000 12%, #000 88%, transparent);
+}
+.story-footer-art img {
+  display: block;
+  width: 100%; height: 100%;
+  object-fit: contain;
+  object-position: center 60%;
+  opacity: .48;
+  /* Glow is baked into the artwork: no continuous animation/GPU filter. */
+}
+.story-footer-bottom { border-top: 1px solid #b2d1d41f; padding-top: 24px; margin-top: 32px; }
+.story-footer-top { min-height: 44px; border: 1px solid #a3c9d54d; background: transparent; white-space: nowrap; transition: background-color 180ms ease; }
+.story-footer-top:hover { background: #a3c9d512; }
+.story-footer a:focus-visible, .story-footer button:focus-visible { outline: 2px solid #67e8f9; outline-offset: 4px; }
+@media (max-width: 767px) {
+  .story-footer { padding: 44px 24px 28px; }
+  .story-footer-grid { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'brand' 'links' 'sources'; row-gap: 28px; }
+  .story-footer-title { font-size: clamp(27px, 7.5vw, 34px); }
+  .story-footer-art { inset: 100px 0 64px; }
+  .story-footer-art img { opacity: .42; object-fit: contain; object-position: center; }
+  .story-footer-links, .story-footer-sources { border-left: 0; border-top: 1px solid #b2d1d41f; padding: 24px 0 0; }
+  .story-footer-links ul { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 16px; }
+  .story-footer-links li { margin-top: 0 !important; }
+  .story-footer-bottom { margin-top: 28px; align-items: flex-start; }
+  .story-footer-bottom > div { line-height: 1.7; }
+}

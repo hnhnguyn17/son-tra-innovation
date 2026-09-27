@@ -1,8 +1,9 @@
-/* Theme Styles & Keyframe Animations */
+/* Dreamcore Coastal Theme & Refined Full-Page Motion Tokens */
+
 @keyframes fade-rise {
   0% {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
   100% {
     opacity: 1;
@@ -10,14 +11,336 @@
   }
 }
 
+@keyframes mist-drift {
+  0%, 100% {
+    transform: translateX(0%) translateY(0%);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateX(2%) translateY(-1.5%);
+    opacity: 0.6;
+  }
+}
+
+@keyframes float-gentle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes ocean-glow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(0, 119, 182, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(0, 119, 182, 0.45);
+  }
+}
+
 .animate-fade-rise {
-  animation: fade-rise 1s ease-out both;
+  animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .animate-fade-rise-delay {
-  animation: fade-rise 1s ease-out 0.3s both;
+  animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
 }
 
 .animate-fade-rise-delay-2 {
-  animation: fade-rise 1s ease-out 0.6s both;
+  animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}
+
+.animate-mist-slow {
+  animation: mist-drift 14s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float-gentle 4s ease-in-out infinite;
+}
+
+.animate-ocean-glow {
+  animation: ocean-glow 3s ease-in-out infinite;
+}
+
+/* Fullpage Scroll Snap Mechanics - Desktop Only (Smooth native momentum scrolling on mobile) */
+@media (min-width: 768px) {
+  html.snap-active {
+    scroll-snap-type: y mandatory;
+    scroll-padding-top: 80px;
+  }
+
+  .snap-section {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .snap-container {
+    scroll-snap-type: y mandatory;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+  }
+
+  .snap-slide {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+}
+
+/* Mobile: Fluid native inertia scrolling without forceful stop or rigid lock */
+@media (max-width: 767px) {
+  html, html.snap-active {
+    scroll-snap-type: none !important;
+    scroll-padding-top: 0 !important;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  .snap-section, .snap-slide {
+    scroll-snap-align: none !important;
+    scroll-snap-stop: normal !important;
+  }
+}
+
+.snap-slide {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Dreamcore Ambient Gradients */
+.dreamcore-mist-bg {
+  background: radial-gradient(
+    circle at 50% 15%,
+    rgba(224, 242, 254, 0.6) 0%,
+    rgba(240, 249, 255, 0.45) 45%,
+    rgba(241, 245, 249, 0.8) 85%
+  );
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  box-shadow: 0 10px 25px -5px rgba(10, 25, 47, 0.06);
+}
+
+/* ==========================================================================
+   OCEAN AMBIENT KEYFRAMES: CÁ ÔNG, TÀU THUYỀN, SÓNG BIỂN, NAVBAR
+   ========================================================================== */
+
+/* 1. Cá Ông (Whale) Swimming Trajectory */
+@keyframes whale-swim-path {
+  0% {
+    transform: translate(-220px, 8vh) scale(0.9) rotate(-3deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.55;
+  }
+  30% {
+    transform: translate(30vw, -4vh) scale(1) rotate(2deg);
+    opacity: 0.7;
+  }
+  60% {
+    transform: translate(65vw, 6vh) scale(0.95) rotate(-2deg);
+    opacity: 0.65;
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate(110vw, -2vh) scale(0.9) rotate(1deg);
+    opacity: 0;
+  }
+}
+
+@keyframes whale-fluke-wave {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+}
+
+@keyframes whale-spout-pulse {
+  0%, 70%, 100% {
+    opacity: 0;
+    transform: translateY(0) scaleY(0.4);
+  }
+  75% {
+    opacity: 0.75;
+    transform: translateY(-16px) scaleY(1.2);
+  }
+  85% {
+    opacity: 0.3;
+    transform: translateY(-24px) scale(1.4);
+  }
+}
+
+/* 2. Tàu Thuyền & Thúng Chai Bobbing on Water */
+@keyframes boat-drift-right {
+  0% {
+    transform: translateX(-150px) translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  5% {
+    opacity: 0.85;
+  }
+  95% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateX(calc(100vw + 150px)) translateY(-4px) rotate(1deg);
+    opacity: 0;
+  }
+}
+
+@keyframes boat-drift-left {
+  0% {
+    transform: translateX(calc(100vw + 150px)) translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  5% {
+    opacity: 0.85;
+  }
+  95% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateX(-150px) translateY(4px) rotate(-1deg);
+    opacity: 0;
+  }
+}
+
+@keyframes boat-rocking {
+  0%, 100% {
+    transform: translateY(0px) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(2.5deg);
+  }
+}
+
+@keyframes thung-spin-float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-4px) rotate(3deg);
+  }
+  66% {
+    transform: translateY(-2px) rotate(-3deg);
+  }
+}
+
+/* 3. Wave Currents Undulation */
+@keyframes wave-current-flow {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes caustic-shimmer {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.08) rotate(3deg);
+  }
+}
+
+/* 4. Navbar Glowing Border & Capsule Aura */
+@keyframes nav-aurora-glow {
+  0%, 100% {
+    box-shadow: 0 0 15px -2px rgba(0, 119, 182, 0.25),
+                0 4px 20px -3px rgba(10, 25, 47, 0.08),
+                inset 0 0 12px rgba(224, 242, 254, 0.4);
+    border-color: rgba(56, 189, 248, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 25px 2px rgba(2, 132, 199, 0.4),
+                0 6px 24px -2px rgba(10, 25, 47, 0.12),
+                inset 0 0 18px rgba(186, 230, 253, 0.6);
+    border-color: rgba(14, 165, 233, 0.7);
+  }
+}
+
+@keyframes light-sweep {
+  0% {
+    transform: translateX(-150%);
+  }
+  100% {
+    transform: translateX(250%);
+  }
+}
+
+/* Animation Utility Classes */
+.animate-whale-swim {
+  animation: whale-swim-path 45s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-whale-fluke {
+  animation: whale-fluke-wave 4s ease-in-out infinite;
+  transform-origin: 30% 50%;
+}
+
+.animate-whale-spout {
+  animation: whale-spout-pulse 8s ease-in-out infinite;
+}
+
+.animate-boat-rock {
+  animation: boat-rocking 3.5s ease-in-out infinite;
+}
+
+.animate-thung-float {
+  animation: thung-spin-float 4.2s ease-in-out infinite;
+}
+
+.animate-wave-slow {
+  animation: wave-current-flow 28s linear infinite;
+}
+
+.animate-wave-medium {
+  animation: wave-current-flow 18s linear infinite;
+}
+
+.animate-caustic {
+  animation: caustic-shimmer 10s ease-in-out infinite;
+}
+
+.animate-nav-aura {
+  animation: nav-aurora-glow 4s ease-in-out infinite;
+}
+
+.animate-light-sweep {
+  animation: light-sweep 3s ease-in-out infinite;
+}
+
+/* Accessibility & Reduced Motion */
+:focus-visible {
+  outline: 2px solid #0077B6;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
