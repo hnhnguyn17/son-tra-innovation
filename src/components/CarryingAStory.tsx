@@ -1,10 +1,11 @@
 import { Heart, ExternalLink, ArrowUp, Anchor, MapPin } from 'lucide-react';
 import { CITATION_REGISTRY } from '../data/contentData';
+import { navigateTo } from '../hooks/navigation';
 import '../styles/footer.css';
 
 export const CarryingAStory = () => {
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+    navigateTo('vung-thung', true);
   };
 
   const quickNav = [
@@ -20,27 +21,27 @@ export const CarryingAStory = () => {
   return (
     <footer
       id="mang-theo-cau-chuyen"
-      className="story-footer w-full text-white md:snap-start md:snap-always"
+      className="story-footer w-full text-white"
     >
       <div className="max-w-6xl mx-auto w-full">
         {/* Top Split */}
         <div className="story-footer-grid">
           {/* Brand & Narrative Intro */}
           <div className="story-footer-brand space-y-4">
-            <div className="inline-flex items-center space-x-2 text-xs font-semibold uppercase tracking-widest text-cyan-400">
+            <div className="inline-flex items-center space-x-2 text-sm font-semibold uppercase tracking-widest text-cyan-400">
               <Anchor size={14} />
               <span>Vũng Thùng — Sơn Trà, TP. Đà Nẵng</span>
             </div>
 
             <h3 className="story-footer-title font-serif text-white">
-              Sơn Trà — Cầu Nối Tri Thức Số & Không Gian Thực Tế
+              Sơn Trà — Miền ký ức neo đậu
             </h3>
 
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light max-w-lg">
-              Cầu nối giữa không gian thực tế và kho tàng tri thức số về địa danh Sơn Trà. Nơi lưu giữ ký ức, định vị địa lý và tôn vinh những câu chuyện mặn mòi qua bao đời người dân xứ biển.
+            <p className="text-sm text-slate-300 leading-relaxed font-light max-w-lg">
+              Một hành trình tìm hiểu văn hóa biển và ký ức làng chài. Phần không gian công viên là đề xuất thiết kế trong đồ án.
             </p>
 
-            <div className="flex items-center space-x-2 text-xs text-slate-400">
+            <div className="flex items-center space-x-2 text-sm text-slate-400">
               <MapPin size={13} className="text-cyan-400" />
               <span>Phường Nại Hiên Đông & Thọ Quang, quận Sơn Trà, TP. Đà Nẵng</span>
             </div>
@@ -48,10 +49,10 @@ export const CarryingAStory = () => {
 
           {/* Quick Links */}
           <nav className="story-footer-links space-y-3" aria-label="Khám phá Sơn Trà từ chân trang">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-300">
+            <h4 className="text-sm font-bold uppercase tracking-wider text-cyan-300">
               Khám phá nhanh
             </h4>
-            <ul className="space-y-2 text-xs text-slate-300">
+            <ul className="space-y-2 text-sm text-slate-300">
               {quickNav.map((item, idx) => (
                 <li key={idx}>
                   <a
@@ -68,17 +69,17 @@ export const CarryingAStory = () => {
 
           {/* Citations & Authentic Sources */}
           <div className="story-footer-sources space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-300">
+            <h4 className="text-sm font-bold uppercase tracking-wider text-cyan-300">
               Tư liệu & Tham khảo
             </h4>
-            <ul className="space-y-2 text-xs text-slate-400">
+            <ul className="space-y-2 text-sm text-slate-400">
               {CITATION_REGISTRY.slice(0, 3).map((cite) => (
                 <li key={cite.id}>
                   <a
                     href={cite.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="story-footer-link hover:text-cyan-200 transition-colors flex items-center space-x-2 text-xs"
+                    className="story-footer-link hover:text-cyan-200 transition-colors flex items-center space-x-2 text-sm"
                   >
                     <ExternalLink size={11} className="shrink-0 mt-0.5" />
                     <span>{cite.title}</span>
@@ -97,7 +98,7 @@ export const CarryingAStory = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="story-footer-bottom flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+        <div className="story-footer-bottom flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-400">
           <div className="flex items-center space-x-1.5">
             <span>Dự án giới thiệu văn hóa và không gian sống cộng đồng Làng cá Vũng Thùng</span>
             <Heart size={12} className="text-rose-400 fill-rose-400" />
@@ -106,7 +107,7 @@ export const CarryingAStory = () => {
           <button
             type="button"
             onClick={scrollToTop}
-            className="story-footer-top flex items-center space-x-2 px-5 py-3 rounded-full text-white text-xs"
+            className="story-footer-top flex items-center space-x-2 px-5 py-3 rounded-full text-white text-sm"
           >
             <span>Về đầu trang</span>
             <ArrowUp size={13} />

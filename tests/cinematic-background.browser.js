@@ -30,7 +30,7 @@ export default async function verifyCinematicBackground(page) {
     assert(await page.locator('.ocean-background').getAttribute('data-ocean-scene') === section, 'Reading surface must retain its chapter');
   }
   await page.getByRole('button', { name: 'Thúng chai nan tre', exact: true }).click();
-  assert(await page.getByRole('heading', { name: 'Hồn cốt Thúng Chai & Nghề đan nan tre', exact: true }).count() === 1, 'Heritage carousel was lost');
+  assert(await page.locator('.heritage-story > .content-change').getByRole('heading', { name: 'Hồn cốt Thúng Chai & Nghề đan nan tre', exact: true }).count() === 1, 'Heritage carousel was lost');
 
   for (const width of [360, 390, 430, 844, 1440]) {
     await page.setViewportSize({ width, height: width === 844 ? 390 : 900 });

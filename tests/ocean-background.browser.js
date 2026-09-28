@@ -40,21 +40,14 @@ export default async function verifyOceanBackground(page) {
   });
   const running = await measure();
   assert(running.frames > 0 && running.fps <= 31, `Mobile Canvas exceeded frame budget: ${running.fps}`);
-  // Existing saved preference still applies, although the current navbar no
-  // longer exposes the manual motion control.
+  // No manual motion preference or button; any dialog pauses the shared background.
   await page.evaluate(() => localStorage.setItem('sontra:ocean-paused', 'true'));
   await page.reload();
-  await page.waitForFunction(() => document.querySelector('.ocean-background').dataset.paused === 'true');
-  assert((await measure()).frames === 0, 'Canvas still draws while paused');
-  await page.reload();
-  assert(await background.getAttribute('data-paused') === 'true', 'Saved pause did not persist');
-  await page.evaluate(() => localStorage.removeItem('sontra:ocean-paused'));
-  await page.reload();
-  await page.locator('#vung-thung').evaluate(element => element.scrollIntoView({ behavior: 'instant' }));
-  await page.getByRole('button', { name: 'Xem thước phim cửa biển Sơn Trà', exact: true }).click();
-  assert(await background.getAttribute('data-paused') === 'true', 'Modal did not pause ocean');
-  assert((await measure()).frames === 0, 'Canvas draws behind modal');
-  await page.getByRole('button', { name: 'Đóng cửa sổ thông tin khung', exact: true }).click();
+  await page.waitForFunction(() => document.querySelector('.ocean-background').dataset.paused === 'false');
+  await page.getByRole('button', { name: 'Mở menu điều hướng', exact: true }).click();
+  assert(await background.getAttribute('data-paused') === 'true', 'Menu did not pause ocean');
+  assert((await measure()).frames === 0, 'Canvas draws behind menu');
+  await page.keyboard.press('Escape');
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.waitForFunction(() => document.querySelector('.ocean-background').dataset.reducedMotion === 'true');
   assert((await measure()).frames === 0, 'Reduced motion still draws');
@@ -80,9 +73,11 @@ export default async function verifyOceanBackground(page) {
     await page.waitForTimeout(900);
     assert(await background.getAttribute('data-ocean-scene') === ids[index], `Dot ${index} selected wrong scene`);
   }
-  await page.getByTitle('Nhấp để bật/tắt chế độ cuộn từng trang (1 lướt = 1 trang)', { exact: true }).click();
+  await page.getByRole('button', { name: 'Chế độ trình chiếu', exact: true }).click();
+  assert(await page.evaluate(() => ['y', 'y proximity'].includes(getComputedStyle(document.documentElement).scrollSnapType)), 'Presentation should use proximity snap');
+  await page.getByRole('button', { name: 'Chế độ trình chiếu', exact: true }).click();
   await page.locator('#di-san').evaluate(element => element.scrollIntoView({ behavior: 'instant' }));
   await page.waitForFunction(() => document.querySelector('.ocean-background').dataset.oceanScene === 'di-san');
   assert(await page.evaluate(() => !document.documentElement.classList.contains('snap-active')), 'Free scroll was not enabled');
-  return { dimensions, chapters: ids.length, mobileCanvasFps: running.fps, pausePersistence: true, modal: true, reducedMotion: true, syntheticVisibility: true, dots: true, freeScroll: true };
+  return { dimensions, chapters: ids.length, mobileCanvasFps: running.fps, legacyPauseIgnored: true, modal: true, reducedMotion: true, syntheticVisibility: true, dots: true, freeScroll: true };
 }

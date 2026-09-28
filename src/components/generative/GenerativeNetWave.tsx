@@ -1,205 +1,96 @@
 import { useEffect, useRef } from 'react';
-import { Waves, Sparkles } from 'lucide-react';
+import { useVisibleMotion } from '../../hooks/useMotion';
 
-interface Point {
-  baseX: number;
-  baseY: number;
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-}
-
-export const GenerativeNetWave = () => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
+export function GenerativeNetWave() {
+  const container = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { paused, reducedMotion } = useVisibleMotion(container);
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let animId: number;
-    let width = (canvas.width = canvas.parentElement?.clientWidth || 600);
-    let height = (canvas.height = canvas.parentElement?.clientHeight || 340);
-
-    const handleResize = () => {
-      if (!canvas || !canvas.parentElement) return;
-      width = canvas.width = canvas.parentElement.clientWidth;
-      height = canvas.height = canvas.parentElement.clientHeight;
-      initGrid();
-    };
-    window.addEventListener('resize', handleResize);
-
-    const cols = 22;
-    const rows = 11;
-    let grid: Point[][] = [];
-
-    const initGrid = () => {
-      grid = [];
-      const stepX = width / (cols - 1);
-      const stepY = height / (rows - 1);
-
-      for (let r = 0; r < rows; r++) {
-        const rowPoints: Point[] = [];
-        for (let c = 0; c < cols; c++) {
-          const x = c * stepX;
-          const y = r * stepY;
-          rowPoints.push({
-            baseX: x,
-            baseY: y,
-            x,
-            y,
-            vx: 0,
-            vy: 0,
-          });
-        }
-        grid.push(rowPoints);
-      }
-    };
-
-    initGrid();
-
-    // Mouse interaction tracking
-    let mouseX = -1000;
-    let mouseY = -1000;
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      mouseX = e.clientX - rect.left;
-      mouseY = e.clientY - rect.top;
-    };
-
-    const handleMouseLeave = () => {
-      mouseX = -1000;
-      mouseY = -1000;
-    };
-
-    canvas.addEventListener('mousemove', handleMouseMove);
-    canvas.addEventListener('mouseleave', handleMouseLeave);
-
-    let time = 0;
-
-    const render = () => {
-      time += 0.025;
+    const stage = canvas?.parentElement;
+    const ctx = canvas?.getContext('2d');
+    if (!canvas || !ctx || !stage) return;
+    let width = 0, height = 0, frame = 0, last = 0, time = 0;
+    let pointer = { x: -1000, y: -1000 };
+    let touchStart: { x: number; y: number } | null = null;
+    const cols = 20, rows = 10;
+    const draw = (delta: number) => {
+      time += delta;
       ctx.clearRect(0, 0, width, height);
-
-      // Update point positions with wave math + spring physics
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          const pt = grid[r][c];
-
-          // 3D Sine wave displacement for fishing net silk motion
-          const waveOffsetY = Math.sin(c * 0.35 + time) * 12 + Math.cos(r * 0.4 + time * 0.8) * 8;
-          const targetY = pt.baseY + waveOffsetY;
-          const targetX = pt.baseX + Math.sin(r * 0.3 + time * 0.6) * 6;
-
-          // Mouse pull elasticity (kéo dãn mắt lưới)
-          const dx = mouseX - pt.x;
-          const dy = mouseY - pt.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          const pullRadius = 130;
-
-          if (dist < pullRadius && dist > 0) {
-            const force = (1 - dist / pullRadius) * 22;
-            pt.vx += (dx / dist) * force * 0.12;
-            pt.vy += (dy / dist) * force * 0.12;
-          }
-
-          // Spring tension return
-          const spring = 0.08;
-          const friction = 0.84;
-          pt.vx += (targetX - pt.x) * spring;
-          pt.vy += (targetY - pt.y) * spring;
-          pt.vx *= friction;
-          pt.vy *= friction;
-          pt.x += pt.vx;
-          pt.y += pt.vy;
-        }
-      }
-
-      // Draw diamond rhombuses (mắt lưới đánh cá)
+      const grid = Array.from({ length: rows }, (_, r) => Array.from({ length: cols }, (_, c) => {
+        const baseX = c * width / (cols - 1), baseY = r * height / (rows - 1);
+        const dx = pointer.x - baseX, dy = pointer.y - baseY;
+        const distance = Math.hypot(dx, dy);
+        const force = Math.max(0, 1 - distance / 110) * .2;
+        return {
+          x: baseX + (reducedMotion ? 0 : Math.sin(r * .35 + time * .7) * 5) + dx * force,
+          y: baseY + (reducedMotion ? 0 : Math.sin(c * .32 + time * 1.2) * 10 + Math.cos(r * .4 + time) * 5) + dy * force,
+        };
+      }));
       ctx.lineWidth = 1;
-
-      // Draw horizontal lines connecting net nodes
+      ctx.strokeStyle = '#087ca43d';
       for (let r = 0; r < rows; r++) {
         ctx.beginPath();
-        for (let c = 0; c < cols; c++) {
-          const pt = grid[r][c];
-          if (c === 0) ctx.moveTo(pt.x, pt.y);
-          else ctx.lineTo(pt.x, pt.y);
-        }
-        ctx.strokeStyle = 'rgba(0, 119, 182, 0.25)';
+        grid[r].forEach((p, c) => c ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
         ctx.stroke();
-      }
-
-      // Draw diagonal cross lines for diamond mesh
-      for (let r = 0; r < rows - 1; r++) {
+        if (r === rows - 1) continue;
         for (let c = 0; c < cols - 1; c++) {
-          const p1 = grid[r][c];
-          const p2 = grid[r + 1][c + 1];
-          const p3 = grid[r][c + 1];
-          const p4 = grid[r + 1][c];
-
           ctx.beginPath();
-          ctx.moveTo(p1.x, p1.y);
-          ctx.lineTo(p2.x, p2.y);
-          ctx.strokeStyle = 'rgba(0, 119, 182, 0.18)';
-          ctx.stroke();
-
-          ctx.beginPath();
-          ctx.moveTo(p3.x, p3.y);
-          ctx.lineTo(p4.x, p4.y);
-          ctx.strokeStyle = 'rgba(56, 189, 248, 0.18)';
+          ctx.moveTo(grid[r][c].x, grid[r][c].y); ctx.lineTo(grid[r + 1][c + 1].x, grid[r + 1][c + 1].y);
+          ctx.moveTo(grid[r][c + 1].x, grid[r][c + 1].y); ctx.lineTo(grid[r + 1][c].x, grid[r + 1][c].y);
           ctx.stroke();
         }
       }
-
-      // Draw glowing net knots (nút thắt mắt lưới)
-      for (let r = 0; r < rows; r += 2) {
-        for (let c = 0; c < cols; c += 2) {
-          const pt = grid[r][c];
-          ctx.beginPath();
-          ctx.arc(pt.x, pt.y, 2, 0, Math.PI * 2);
-          ctx.fillStyle = 'rgba(0, 119, 182, 0.6)';
-          ctx.fill();
-        }
+      ctx.fillStyle = '#167a9b';
+      for (let r = 0; r < rows; r += 2) for (let c = 0; c < cols; c += 2) {
+        const p = grid[r][c]; ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI * 2); ctx.fill();
       }
-
-      animId = requestAnimationFrame(render);
     };
-
-    render();
-
+    const resize = () => {
+      width = stage.clientWidth; height = stage.clientHeight;
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      canvas.width = Math.round(width * dpr); canvas.height = Math.round(height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); draw(0);
+    };
+    const updatePointer = (event: PointerEvent) => {
+      const bounds = canvas.getBoundingClientRect();
+      pointer = { x: event.clientX - bounds.left, y: event.clientY - bounds.top };
+      if (paused) draw(0);
+    };
+    const down = (event: PointerEvent) => {
+      if (event.pointerType !== 'mouse') touchStart = { x: event.clientX, y: event.clientY };
+      else updatePointer(event);
+    };
+    const move = (event: PointerEvent) => {
+      if (event.pointerType !== 'mouse') {
+        if (!touchStart) return;
+        const dx = Math.abs(event.clientX - touchStart.x), dy = Math.abs(event.clientY - touchStart.y);
+        if (dy > dx && dy > 8) { leave(); return; }
+        if (dx < 6) return;
+      }
+      updatePointer(event);
+    };
+    const leave = () => { pointer = { x: -1000, y: -1000 }; touchStart = null; if (paused) draw(0); };
+    const render = (now: number) => {
+      const interval = 1000 / (innerWidth < 768 ? 30 : 60);
+      if (!last) last = now;
+      const elapsed = now - last;
+      if (elapsed >= interval) { draw(Math.min(elapsed / 1000, .1)); last = now - elapsed % interval; }
+      frame = requestAnimationFrame(render);
+    };
+    const observer = new ResizeObserver(resize);
+    observer.observe(stage); resize();
+    if (!paused) frame = requestAnimationFrame(render);
+    canvas.addEventListener('pointerdown', down);
+    canvas.addEventListener('pointermove', move);
+    canvas.addEventListener('pointerleave', leave);
+    canvas.addEventListener('pointerup', leave);
+    canvas.addEventListener('pointercancel', leave);
     return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener('resize', handleResize);
-      canvas.removeEventListener('mousemove', handleMouseMove);
-      canvas.removeEventListener('mouseleave', handleMouseLeave);
+      cancelAnimationFrame(frame); observer.disconnect();
+      canvas.removeEventListener('pointerdown', down); canvas.removeEventListener('pointermove', move);
+      canvas.removeEventListener('pointerleave', leave); canvas.removeEventListener('pointerup', leave); canvas.removeEventListener('pointercancel', leave);
     };
-  }, []);
-
-  return (
-    <div className="relative w-full h-full min-h-[220px] rounded-2xl overflow-hidden bg-gradient-to-br from-sky-50/70 via-white to-cyan-50/50 border border-slate-200/80 shadow-xs flex flex-col justify-between p-4">
-      {/* Top Banner */}
-      <div className="relative z-10 flex items-center justify-between text-xs">
-        <div className="flex items-center space-x-1.5 text-[#0077B6] font-semibold text-[11px] uppercase tracking-wider">
-          <Waves size={14} className="text-[#0077B6]" />
-          <span>Sóng lưới thời gian (Generative Mesh)</span>
-        </div>
-        <span className="text-[10px] text-[#4A5568]/70 italic flex items-center">
-          <Sparkles size={11} className="mr-1 text-[#0077B6]" />
-          Rê chuột để kéo dãn mắt lưới
-        </span>
-      </div>
-
-      {/* Canvas */}
-      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing" />
-
-      {/* Bottom Footnote */}
-      <div className="relative z-10 flex items-center justify-between text-[10px] text-[#4A5568]/80 pt-2 border-t border-slate-200/50">
-        <span>Tái hiện tấm lưới rùng bãi cát Mân Thái</span>
-        <span className="font-mono text-[#0077B6]">Thuật toán sóng sin 3D</span>
-      </div>
-    </div>
-  );
-};
+  }, [paused, reducedMotion]);
+  return <div ref={container} className="interaction-card" data-motion-paused={paused}><p className="eyebrow">Chạm vào nhịp biển</p><h3>Sóng lưới thời gian</h3><p className="secondary-copy pointer-hint">Rê chuột để cảm nhận độ giãn của mắt lưới.</p><p className="secondary-copy touch-hint">Chạm và kéo ngang trên lưới. Vuốt dọc để tiếp tục đọc.</p><div className="mesh-stage"><canvas ref={canvasRef} role="img" aria-label="Minh họa mắt lưới rùng biến đổi theo nhịp sóng và vị trí chạm" /></div><p className="secondary-copy mt-4">Một diễn giải bằng hình ảnh về tấm lưới rùng của làng biển.</p></div>;
+}

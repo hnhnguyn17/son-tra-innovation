@@ -67,24 +67,24 @@
 /* Fullpage Scroll Snap Mechanics - Desktop Only (Smooth native momentum scrolling on mobile) */
 @media (min-width: 768px) {
   html.snap-active {
-    scroll-snap-type: y mandatory;
-    scroll-padding-top: 80px;
+    scroll-snap-type: y proximity;
+    scroll-padding-top: var(--anchor-offset, 88px);
   }
 
   .snap-section {
     scroll-snap-align: start;
-    scroll-snap-stop: always;
+    scroll-snap-stop: normal;
   }
 
   .snap-container {
-    scroll-snap-type: y mandatory;
+    scroll-snap-type: y proximity;
     overflow-y: auto;
     scroll-behavior: smooth;
   }
 
   .snap-slide {
     scroll-snap-align: start;
-    scroll-snap-stop: always;
+    scroll-snap-stop: normal;
   }
 }
 

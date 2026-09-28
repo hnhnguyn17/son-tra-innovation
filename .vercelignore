@@ -1,0 +1,13 @@
+.git/
+.vercel/
+.env
+.env.*
+node_modules/
+dist/
+design/
+docs/
+tests/
+coverage/
+playwright-report/
+test-results/
+*.log

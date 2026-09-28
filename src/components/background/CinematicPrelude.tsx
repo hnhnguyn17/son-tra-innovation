@@ -1,3 +1,4 @@
+import { navigateTo } from '../../hooks/navigation';
 import { ArrowDown, Anchor, Waves } from 'lucide-react';
 
 type Chapter = 'coast' | 'harbor' | 'whale';
@@ -28,7 +29,8 @@ export function CinematicPrelude({ chapter, targetId }: { chapter: Chapter; targ
       <div className="cinematic-bottom">
         <a className="cinematic-explore" href={`#${targetId}`} onClick={event => {
           event.preventDefault();
-          document.getElementById(targetId)?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'start' });
+          history.pushState(null, '', '#' + targetId);
+          navigateTo(targetId, true);
         }}>{content.action}<ArrowDown size={16} aria-hidden="true" /></a>
         <p className="cinematic-art-note">Minh họa nghệ thuật · Cảm hứng Sơn Trà</p>
       </div>

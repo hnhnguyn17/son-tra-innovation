@@ -3,7 +3,7 @@ import { Sparkles, Layers, Palette, Maximize2, Compass, Eye, Check, Clock } from
 import { PARK_CONCEPT_DESIGNS } from '../data/contentData';
 import { TemporalMorphStudio } from './generative/TemporalMorphStudio';
 import { KineticParkSimulator } from './generative/KineticParkSimulator';
-import type { MediaSlotInfo } from './MediaModal';
+import type { MediaSlotInfo } from '../types/media';
 
 interface MemoryIntoSpaceProps {
   onOpenMediaSlot: (slot: MediaSlotInfo) => void;

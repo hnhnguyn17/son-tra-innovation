@@ -38,3 +38,6 @@ test-results/
 
 # Original artwork retained locally; runtime assets live in public/assets
 /design/*/source/
+
+# Local Vercel project link
+.vercel/

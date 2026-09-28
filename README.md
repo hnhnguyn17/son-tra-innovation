@@ -1,6 +1,8 @@
-﻿# Sơn Trà — Miền ký ức neo đậu
+# Sơn Trà — Miền ký ức neo đậu
 
 Website giới thiệu văn hóa biển, ký ức làng chài và ý tưởng không gian Công viên Đổi mới Sáng tạo Sơn Trà, Đà Nẵng. Dự án sử dụng React, TypeScript và Vite; nội dung được trình bày qua một trang cuộn với nền biển minh họa, thư viện hình ảnh và các trải nghiệm tương tác.
+
+**Website:** [son-tra-innovation.vercel.app](https://son-tra-innovation.vercel.app)
 
 Đây là website phục vụ đồ án và nghiên cứu thiết kế. Các minh họa nghệ thuật và đề xuất không gian không đại diện cho quy hoạch đã phê duyệt hoặc công trình đang hoạt động.
 
@@ -14,11 +16,11 @@ Website giới thiệu văn hóa biển, ký ức làng chài và ý tưởng kh
 6. **Trải Nghiệm Bờ Vịnh** — phối cảnh, bản vẽ và ý tưởng hoạt động công viên.
 7. **Tra Cứu & Đồng Hành** — liên kết tham khảo và thông tin cuối trang.
 
-Trang có điều hướng theo chương, chế độ cuộn tự do, hộp xem tư liệu và nền biển thích ứng với thiết bị. Hiệu ứng nền hỗ trợ tùy chọn giảm chuyển động của hệ điều hành.
+Trang mặc định cuộn tự do, có điều hướng theo chương và chế độ trình chiếu tùy chọn trên desktop. Lightbox phối cảnh và menu hỗ trợ bàn phím. Nền biển và lưới tương tác tự tuân theo cài đặt giảm chuyển động của hệ điều hành; không có nút giảm chuyển động riêng.
 
 ## Chạy trên máy
 
-Yêu cầu Node.js **20.19+ trong nhánh 20**, hoặc **22.12+** và npm, theo yêu cầu của Vite đang cài đặt. Nên dùng Node.js 22.12 trở lên.
+Yêu cầu Node.js **22.x, từ 22.12 trở lên**, và npm. Dự án cố định nhánh Node.js 22 để môi trường phát triển và Vercel sử dụng cùng phiên bản chính.
 
 ```bash
 npm ci
@@ -61,7 +63,7 @@ tests/                 Các hàm kiểm tra giao diện bằng Playwright
 - Minh họa footer: [design/footer/README.md](design/footer/README.md), ảnh WebP tại `public/assets/footer/`.
 - Nguồn tham khảo và tư liệu cần bổ sung: [docs/content-sources.md](docs/content-sources.md).
 
-Một số vị trí ảnh, video và lời kể vẫn là khung chờ bổ sung tư liệu. Kiểm tra nguồn và quyền sử dụng trước khi thay bằng nội dung thực tế.
+Một số vị trí ảnh, video và lời kể vẫn đang chờ bổ sung tư liệu; giao diện không cung cấp nút phát hay công cụ chèn file cho các vị trí này. Các tuyến nhân vật được trình bày là nội dung nghiên cứu đang sưu tầm, không phải phỏng vấn đã xác minh. Giọng đọc dùng tổng hợp tiếng nói của trình duyệt. Kiểm tra nguồn và quyền sử dụng trước khi thay bằng nội dung thực tế.
 
 ## Kiểm tra
 
@@ -72,8 +74,26 @@ npm run build
 
 Các file `tests/*.browser.js` xuất hàm nhận một Playwright `Page` đã mở ứng dụng. Chúng chưa được tích hợp thành lệnh `npm test` và dự án chưa khai báo Playwright trong dependencies. Các báo cáo trong `docs/` ghi lại những lần kiểm tra trước, không thay thế việc kiểm tra lại phiên bản hiện tại.
 
+Kiểm tra đợt cải thiện UI: `ui-refresh.browser.js` kiểm tra bộ lọc, trạng thái trống, điều hướng, dialog và giảm chuyển động; `ui-interactions.browser.js` kiểm tra lỗi giọng đọc/clipboard, vòng đời Canvas và thao tác cảm ứng qua Chromium CDP. Chạy trên trang foreground hoặc Chromium headless để animation không bị trình duyệt tạm dừng khi cửa sổ bị thu nhỏ. Dùng trang mới cho mỗi bộ kiểm tra. Xem [báo cáo UI](docs/ui-refresh-verification.md).
+
 ## Build và triển khai
+
+### Vercel
+
+Import repo `hnhnguyn17/son-tra-innovation` vào Vercel, chọn Root Directory là gốc repo và Production Branch là `main`. Cấu hình build được lưu tại [vercel.json](vercel.json):
+
+| Thiết lập | Giá trị |
+| --- | --- |
+| Framework | Vite |
+| Node.js | 22.x (khai báo trong `package.json`) |
+| Install Command | `npm ci` |
+| Build Command | `npm run build` |
+| Output Directory | `dist` |
+
+Sau khi kết nối GitHub, các lần push lên `main` sẽ kích hoạt bản deploy production. Kiểm tra trạng thái **Ready** và commit của deployment trong Vercel trước khi chia sẻ URL. Ứng dụng hiện không yêu cầu biến môi trường.
+
+### Hosting tĩnh khác
 
 Đưa nội dung thư mục `dist/` sau khi build lên dịch vụ lưu trữ web tĩnh. Cấu hình hiện tại dùng đường dẫn tài nguyên từ gốc (`/assets/...`), phù hợp khi website được phục vụ tại gốc tên miền. Triển khai dưới đường dẫn con cần cập nhật cấu hình base và các đường dẫn tài nguyên tương ứng.
 
-Giữ `package-lock.json` trong Git để cài đặt nhất quán. Không commit `node_modules/`, `dist/`, file môi trường chứa thông tin riêng, log, kết quả kiểm thử hoặc ảnh thiết kế gốc trong `design/*/source/`. Các ảnh gốc có thể giữ tại máy; website chỉ cần các bản tối ưu trong `public/assets/`.
+Giữ `package-lock.json` trong Git để cài đặt nhất quán. Không commit `node_modules/`, `dist/`, `.vercel/`, file môi trường chứa thông tin riêng, log, kết quả kiểm thử hoặc ảnh thiết kế gốc trong `design/*/source/`. Các ảnh gốc có thể giữ tại máy; website chỉ cần các bản tối ưu trong `public/assets/`.

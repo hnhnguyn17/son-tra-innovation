@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Anchor, ShieldCheck, MapPin, ExternalLink, Image as ImageIcon, Maximize2 } from 'lucide-react';
 import { LAND_TIMELINE } from '../data/contentData';
-import type { MediaSlotInfo } from './MediaModal';
+import type { MediaSlotInfo } from '../types/media';
 
 interface LandAndMemoryProps {
   onOpenMediaSlot: (slot: MediaSlotInfo) => void;

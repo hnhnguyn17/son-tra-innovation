@@ -15,7 +15,8 @@ export const OceanLivingBackground = ({ activeSectionId, paused, reducedMotion }
   const controlRef = useRef({ paused, density: 0.7 });
   const wakeRef = useRef<(() => void) | null>(null);
   const scene = OCEAN_SCENES[activeSectionId] ?? OCEAN_SCENES['vung-thung'];
-  const artworkReady = loadedArtwork.includes(scene.artwork);
+  // Keep procedural fallback hidden while the previous decoded scene is retained.
+  const artworkReady = loadedArtwork.length > 0;
 
   useEffect(() => {
     controlRef.current = { paused, density: scene.particles };
