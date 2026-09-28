@@ -1,0 +1,15 @@
+# Mobile ocean artwork
+
+Generated using the built-in imagegen tool, with each existing landscape PNG as a style and subject reference. Original outputs are preserved in `source/*-mobile.png`; production WebP assets are in `../../public/assets/ocean/`. Image encoding uses WebP quality 0.82 at 720 px width.
+
+## Coast
+
+Use case: stylized-concept. Create a dedicated PORTRAIT 9:16 mobile website background. Reference image 1 provides Son Tra coast subject, dawn lighting, painterly photographic style and turquoise/forest-green palette. Recompose for a narrow phone, do not crop the landscape. Top 45% is softly luminous pale ivory-blue sky with very sparse clouds, quiet center for overlaid dark title text. Lower half contains green Son Tra peninsula and tiny white coastal statue in distance, one complete blue Vietnamese fishing boat at 68% height centrally, smaller boat far away, wicker basket boat and stone quay subtle bottom corner. Keep main boat entirely inside central 70% width, leaves only at extreme upper corners, warm dawn reflection. Elegant natural scenic art, no text, no UI, no border or watermark. Full bleed vertical image.
+
+## Harbor
+
+Use case: stylized-concept. Create a dedicated PORTRAIT 9:16 mobile website background. Reference image 1 is style/subject reference for Son Tra storm shelter harbor: retain curved stone breakwater enclosing blue Vietnamese fishing boats, green peninsula, distant tiny white statue, dawn warm light and clear turquoise water. Recompose the entire scene vertically for a narrow phone, NOT a crop. Top 40% softly luminous pale ivory blue sky, calm central negative space for dark overlaid title. The COMPLETE sweeping crescent breakwater fits within central 85% of image width in the lower half, enclosing two recognizable boats; no cropped breakwater tip. Forested hill middle distance, very subtle leaves at outer corners. Main harbor subjects around 60-78% image height. Sophisticated natural cinematic painterly photography consistent with reference. No lettering, UI, watermark, border. Full bleed vertical artwork.
+
+## Whale
+
+Use case: stylized-concept. Create PORTRAIT 9:16 dedicated mobile website background for Son Tra whale heritage. Image 1 is reference for painterly photographic style, turquoise water, green Son Tra forest peninsula, distant tiny white statue and reverent gentle humpback whale. Recompose vertically, NOT a landscape crop. Top 40% quiet luminous pale ivory-blue sky with sparse soft clouds for dark overlaid website title. Narrow green peninsula and two tiny blue Vietnamese fishing boats across middle distance; split above/below water view at 52% height. Below surface, one complete graceful humpback whale swims diagonally, head upper right at 65% height, tail lower left at 80%, entire head tail and flippers fully contained in central 75% width with generous margins. Sunbeams filtered into clear teal ocean, understated coral at lowest corners, small leaves at extreme top corners. Friendly majestic natural whale, calm and respectful. Match dawn reference colors. No lettering, UI, border, watermark. Full bleed vertical artwork.

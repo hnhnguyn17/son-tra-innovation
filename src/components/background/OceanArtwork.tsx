@@ -14,6 +14,7 @@ export function OceanArtwork({ name, loaded, onLoad, onError }: {
   return <div className="ocean-artworks">
     {names.filter(item => loaded.includes(item) || item === name).map(item => (
       <picture key={item} className="ocean-artwork" data-visible={loaded.includes(item) && visibleName === item} data-artwork={item}>
+        <source media="(max-width: 767px) and (orientation: portrait)" srcSet={`/assets/ocean/${item}-mobile.webp`} width="720" height="1279" />
         <source media="(max-width: 767px)" srcSet={`/assets/ocean/${item}-960.webp`} />
         <img src={`/assets/ocean/${item}-1536.webp`} alt="" width="1536" height="1024"
           decoding="async" fetchPriority={item === 'coast' ? 'high' : 'auto'}

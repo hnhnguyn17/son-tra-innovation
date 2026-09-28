@@ -11,7 +11,7 @@ export default async function verifyCinematicBackground(page) {
   const initialImages = await page.locator('.ocean-artwork img').count();
   assert(initialImages === 1, 'QR entry must fetch only the entrance artwork');
   assert((await page.locator('.ocean-artwork img').getAttribute('src')).includes('coast'), 'Wrong first scene');
-  assert((await page.locator('.ocean-artwork img').evaluate(img => img.currentSrc)).endsWith('coast-960.webp'), 'Mobile must select small WebP');
+  assert((await page.locator('.ocean-artwork img').evaluate(img => img.currentSrc)).endsWith('coast-mobile.webp'), 'Portrait mobile must select dedicated artwork');
   assert(await page.locator('h1').count() === 1, 'Exactly one page-level heading expected');
 
   for (const [section, artwork, target] of [

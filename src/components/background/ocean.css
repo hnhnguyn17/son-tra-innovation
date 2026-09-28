@@ -54,9 +54,6 @@
   .chapter-content { scroll-snap-align: start; scroll-snap-stop: normal; }
 }
 @media (max-width: 767px) {
-  .ocean-artwork img { position: absolute; bottom: 0; height: 69%; object-position: 52% 64%; mask-image: linear-gradient(transparent, #000 14%); }
-  .ocean-artwork[data-artwork="harbor"] img { object-position: 56% 68%; }
-  .ocean-artwork[data-artwork="whale"] img { object-position: 53% 68%; }
   .ocean-waterlight { inset: 65% -3% -3%; }
   .cinematic-prelude { padding: 100px 20px 22px; min-height: 100svh; }
   .cinematic-title { font-size: clamp(40px, 11vw, 54px); }
@@ -125,6 +122,15 @@
 @media (max-width: 767px) {
  .cinematic-prelude:not([data-chapter="coast"]) { min-height: 70svh; padding-top: 96px; }
  .cinematic-prelude:not([data-chapter="coast"]) .cinematic-bottom { margin-top: 40px; }
- .ocean-artwork[data-artwork="harbor"] img { top: 28svh; bottom: auto; height: 45svh; object-position: 60% 70%; }
- .ocean-artwork[data-artwork="whale"] img { top: 28svh; bottom: auto; height: 45svh; object-position: 62% 82%; }
+}
+
+/* Portrait art is composed for phones: preserve its full width and let the
+   quiet sky blend into the palette above, rather than cropping the subjects. */
+@media (max-width: 767px) and (orientation: portrait) {
+  .ocean-artwork img {
+    position: absolute; bottom: 0; width: 100%; height: auto;
+    mask-image: linear-gradient(transparent, #000 18%);
+  }
+  .ocean-artwork[data-artwork="harbor"] img,
+  .ocean-artwork[data-artwork="whale"] img { bottom: 30svh; }
 }
